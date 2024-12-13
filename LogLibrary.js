@@ -4,20 +4,27 @@
  * @return {string} - 'OK' si le fichier est trouvé, ou un message d'erreur.
  */
 function InitializeLogging(fileId) {
-    PropertiesService.getScriptProperties().deleteAllProperties(); // Réinitialise les propriétés
+    Logger.log('Starting InitializeLogging with fileId: ' + fileId);
+    PropertiesService.getScriptProperties().deleteAllProperties();
+    Logger.log('Properties reset completed');
     
     try {
-      // Vérifie si le fichier existe
-      var fileFound = DriveApp.getFileById(fileId);
-      if (!fileFound) {
-        throw 'Fichier introuvable avec l\'ID : ' + fileId;
-      }
-  
-      // Enregistre l'ID du fichier dans les propriétés
-      PropertiesService.getScriptProperties().setProperty('LogFileID', fileId);
-      return 'OK'; // Retourne OK si tout va bien
+        Logger.log('Attempting to retrieve file...');
+        var fileFound = DriveApp.getFileById(fileId);
+        Logger.log('File found: ' + fileFound.getName());
+        
+        if (!fileFound) {
+            Logger.log('Error: fileFound is null or undefined');
+            throw 'File not found with ID: ' + fileId;
+        }
+    
+        Logger.log('Saving file ID in properties...');
+        PropertiesService.getScriptProperties().setProperty('LogFileID', fileId);
+        Logger.log('ID successfully saved');
+        return 'OK';
     } catch (e) {
-      return e.toString(); // Retourne un message d'erreur
+        Logger.log('Caught error: ' + e.toString());
+        return e.toString();
     }
 }
   
