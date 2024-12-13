@@ -5,6 +5,15 @@
  */
 function InitializeLogging(fileId) {
     Logger.log('Starting InitializeLogging with fileId: ' + fileId);
+    
+    // Check if the same file is already initialized
+    var currentLogFileId = PropertiesService.getScriptProperties().getProperty('LogFileID');
+    if (currentLogFileId === fileId) {
+        Logger.log('System already initialized with this log file');
+        return 'OK';
+    }
+    
+    // If ID is different or non-existent, proceed with initialization
     PropertiesService.getScriptProperties().deleteAllProperties();
     Logger.log('Properties reset completed');
     
@@ -34,7 +43,7 @@ function InitializeLogging(fileId) {
   function fnSaveLog() {
     var logFileID = PropertiesService.getScriptProperties().getProperty('LogFileID');
     if (!logFileID) {
-      Logger.log('Aucun fichier de log initialisé.');
+      Logger.log('No log file initialized.');
       return;
     }
   
@@ -59,4 +68,5 @@ function InitializeLogging(fileId) {
     }
     return stringToTrim;
   }
+  
   
